@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+
+@layer base {
+  :root {
+    color-scheme: dark;
+    --color-bg: 10, 10, 10;          /* #0a0a0a */
+    --color-surface: 26, 26, 26;      /* #1a1a1a */
+    --color-primary: 34, 197, 94;     /* #22c55e */
+    --color-main: 255, 255, 255;      /* #ffffff */
+    --color-muted: 156, 163, 175;     /* #9ca3af */
+    --color-divider: 255, 255, 255;
+    --color-foreground: 0, 0, 0;
+  }
+
+  .light {
+    color-scheme: light;
+    --color-bg: 249, 250, 251;        /* #f9fafb */
+    --color-surface: 255, 255, 255;   /* #ffffff */
+    --color-primary: 22, 163, 74;     /* #16a34a */
+    --color-main: 17, 24, 39;         /* #111827 */
+    --color-muted: 75, 85, 99;        /* #4b5563 */
+    --color-divider: 0, 0, 0;
+    --color-foreground: 255, 255, 255;
+  }
+
+  body {
+    background-color: rgb(var(--color-bg));
+    color: rgb(var(--color-main));
+    font-family: theme('fontFamily.sans');
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}
+
+/* Custom Scrollbar for Code Editor Panels */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.material-symbols-outlined {
+  font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;
+  font-size: 20px;
+}
+.font-headline { font-family: 'Plus Jakarta Sans', sans-serif; }
+.font-mono, .font-body { font-family: 'DM Mono', monospace; }
+.terminal-glow {
+  box-shadow: 0 0 48px 6px rgba(75, 226, 119, 0.06);
+}
+.login-card {
+  background-color: #1a1a1a;
+  border: 1px solid #2a2a2a;
+}
+.input-dark {
+  background-color: #0f0f0f;
+}
+::-webkit-scrollbar-track {
+  background: rgb(var(--color-bg));
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--color-surface));
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--color-muted));
+}

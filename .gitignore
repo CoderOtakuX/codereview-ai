@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.env
+.DS_Store
+*.log
+.gemini/
+*.zip
+stitch/
+stitch2/
+test-integration.js
+package-lock.json
+postgres_data/
