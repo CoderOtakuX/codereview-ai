@@ -21,7 +21,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // CORS Setup to allow frontend connections
-const allowedOrigins = [env.CORS_ORIGIN, "http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:3000"];
+const originsFromEnv = env.CORS_ORIGIN.split(",").map(o => o.trim());
+const allowedOrigins = [...originsFromEnv, "http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:3000"];
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(helmet());
 app.use(rateLimiter);

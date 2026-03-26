@@ -467,6 +467,24 @@ MIT License - see [LICENSE](LICENSE) file
 
 ---
 
+## 🚀 Production Challenges & Solutions
+
+Deploying a full-stack AI application to a hybrid cloud environment (Vercel + AWS) presented several real-world engineering challenges:
+
+### 1. The HTTPS/Mixed Content Barrier
+**Challenge:** When moving the frontend to Vercel (HTTPS) while keeping the backend on AWS (HTTP), browsers blocked all API calls due to "Mixed Content" security restrictions.
+**Solution:** Implemented **Caddy** as a reverse proxy on the AWS EC2 instance. Caddy automatically provisions and renews Let's Encrypt SSL certificates, enabling a secure `https://` endpoint for the backend that satisfies browser security requirements.
+
+### 2. Memory Management (OOM Errors)
+**Challenge:** Standard Docker builds of heavy Node.js/TypeScript applications often exhausted the RAM on 1GB/2GB EC2 instances, leading to `signal: killed` errors during `npm install` and `npm run build`.
+**Solution:** Configured **AWS Swap Space (2GB)** to augment physical memory and optimized the CI/CD pipeline to build containers sequentially rather than in parallel, ensuring stable deployment on cost-effective infrastructure.
+
+### 3. Cross-Origin Reliability
+**Challenge:** Supporting both local development and multi-platform production required a dynamic CORS configuration.
+**Solution:** Refactored the Express backend to support comma-separated origins in the `CORS_ORIGIN` environment variable, allowing the same codebase to serve requests from `localhost`, `vercel.app`, and custom domains simultaneously.
+
+---
+
 ## 🙏 Acknowledgments
 
 - [Groq](https://groq.com) for ultra-fast LLM inference
