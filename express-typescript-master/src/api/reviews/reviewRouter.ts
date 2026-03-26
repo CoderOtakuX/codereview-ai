@@ -97,17 +97,26 @@ reviewRouter.post("/github", authenticate, async (req: Request, res: Response) =
         const reviews = [];
 
         for (const file of validFiles) {
-            const code = extractCodeFromPatch(file.patch || "");
-            const language = detectLanguage(file.filename);
-            
-            const result = await reviewService.createReview(userId, { code, language: language as any });
-            if (result.success && result.responseObject) {
-                reviews.push({ filename: file.filename, reviewId: result.responseObject.id, status: 'pending' });
+            try {
+                const code = extractCodeFromPatch(file.patch || "");
+                const language = detectLanguage(file.filename);
+                
+                const result = await reviewService.createReview(userId, { code, language: language as any });
+                if (result.success && result.responseObject) {
+                    reviews.push({ filename: file.filename, reviewId: result.responseObject.id, status: 'pending' });
+                }
+            } catch (jobErr) {
+                console.error(`[GitHub PR] Error creating review for ${file.filename}:`, jobErr);
             }
+        }
+
+        if (reviews.length === 0) {
+            return res.status(StatusCodes.BAD_REQUEST).json(ServiceResponse.failure("Failed to queue any files for review. Check backend logs for details.", null, StatusCodes.BAD_REQUEST));
         }
 
         return res.status(StatusCodes.OK).json(ServiceResponse.success("PR queued for review", reviews, StatusCodes.OK));
     } catch (err) {
+        console.error("[GitHub PR] Fatal error:", err);
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ServiceResponse.failure((err as Error).message, null, StatusCodes.INTERNAL_SERVER_ERROR));
     }
 });
@@ -150,8 +159,11 @@ reviewRouter.post("/github-repo", authenticate, async (req: Request, res: Respon
                 const result = await reviewService.createReview(userId, { code: content, language: language as any });
                 if (result.success && result.responseObject) {
                     reviews.push({ filename: file.path, reviewId: result.responseObject.id, status: 'pending' });
+                } else {
+                    console.error(`[GitHub Repo] Failed to create review for ${file.path}:`, result.message);
                 }
-            } catch {
+            } catch (fileErr) {
+                console.error(`[GitHub Repo] Error processing ${file.path}:`, fileErr);
                 continue;
             }
         }

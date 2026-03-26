@@ -57,13 +57,15 @@ function PrReviewPanel({ file }: { file: { filename: string, reviewId: string } 
           <span className="font-mono text-sm text-white truncate max-w-[180px] sm:max-w-xs">{file.filename}</span>
         </div>
         <div className="flex items-center gap-3">
-          {status === "pending" || status === "processing" ? (
-             <Clock className="w-4 h-4 text-brand animate-pulse" />
-          ) : status === "completed" ? (
-             <CheckCircle className="w-4 h-4 text-brand" />
-          ) : (
-             <AlertCircle className="w-4 h-4 text-red-500" title={reviewInfo?.responseObject?.errorMessage || ""} />
-          )}
+          <span title={reviewInfo?.responseObject?.errorMessage || ""}>
+            {status === "pending" || status === "processing" ? (
+               <Clock className="w-4 h-4 text-brand animate-pulse" />
+            ) : status === "completed" ? (
+               <CheckCircle className="w-4 h-4 text-brand" />
+            ) : (
+               <AlertCircle className="w-4 h-4 text-red-500" />
+            )}
+          </span>
           <span className="text-xs uppercase px-2 py-1 rounded bg-editor border border-zinc-800 text-zinc-400 font-mono" title={reviewInfo?.responseObject?.errorMessage || ""}>
             {status}
           </span>
@@ -218,8 +220,9 @@ export function DashboardPage() {
       if (res.success && res.responseObject?.id) {
         setCurrentReviewId(res.responseObject.id);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
+      toast.error(`Analysis failed: ${err.message || "Unknown error"}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -233,8 +236,9 @@ export function DashboardPage() {
       if (res.success && res.responseObject?.id) {
         setCurrentReviewId(res.responseObject.id);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
+      toast.error(`Upload failed: ${err.message || "Unknown error"}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -248,11 +252,11 @@ export function DashboardPage() {
       if (res.success && res.responseObject) {
         setPrReviews(res.responseObject);
       } else if (!res.success && res.message) {
-        alert(`Error: ${res.message}`);
+        toast.error(`Error: ${res.message}`);
       }
     } catch (err: any) {
       console.error(err);
-      alert(`Error importing PR: ${err.message || "Unknown error"}`);
+      toast.error(`Error importing PR: ${err.message || "Unknown error"}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -272,11 +276,11 @@ export function DashboardPage() {
         setSelectedPaths(res.responseObject.map((f: any) => f.path));
         setShowFilePicker(true);
       } else if (!res.success && res.message) {
-        alert(`Error: ${res.message}`);
+        toast.error(`Error: ${res.message}`);
       }
     } catch (err: any) {
       console.error(err);
-      alert(`Error fetching files: ${err.message || "Unknown error"}`);
+      toast.error(`Error fetching files: ${err.message || "Unknown error"}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -298,11 +302,11 @@ export function DashboardPage() {
         setRepoReviews(res.responseObject);
         setShowFilePicker(false);
       } else if (!res.success && res.message) {
-        alert(`Error: ${res.message}`);
+        toast.error(`Error: ${res.message}`);
       }
     } catch (err: any) {
       console.error(err);
-      alert(`Error reviewing files: ${err.message || "Unknown error"}`);
+      toast.error(`Error reviewing files: ${err.message || "Unknown error"}`);
     } finally {
       setIsSubmitting(false);
     }

@@ -166,8 +166,12 @@ export async function fetchRepoFileTree(
 
 export async function fetchFileContent(fileUrl: string, token?: string): Promise<string> {
     const headers = buildHeaders(token);
+    console.log(`[GitHub API] Fetching content: ${fileUrl} (Token present: ${!!token})`);
     const res = await fetch(fileUrl, { headers });
-    if (!res.ok) throw new Error(`GitHub API error: ${res.status} ${res.statusText}`);
+    if (!res.ok) {
+        console.error(`[GitHub API] Failed to fetch content from ${fileUrl}: ${res.status} ${res.statusText}`);
+        throw new Error(`GitHub API error: ${res.status} ${res.statusText}`);
+    }
     const data = await res.json();
     return Buffer.from(data.content, 'base64').toString('utf-8');
 }
