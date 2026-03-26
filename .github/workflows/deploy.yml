@@ -22,26 +22,15 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd ~/codereview-ai
+            cd ~/codereview-ai/codereview-ai
 
             echo "Pulling latest code..."
             git pull origin main
 
-            echo "Installing backend dependencies..."
-            cd express-typescript-master
-            npm install
-            cd ..
-
-            echo "Installing frontend dependencies..."
-            cd client
-            npm install
-            cd ..
-
-            echo "Rebuilding containers..."
-            docker compose up -d --build
+            echo "Rebuilding containers (no cache)..."
+            docker compose up -d --build --force-recreate
 
             echo "Running migrations..."
-            # Using Docker to run migrations to ensure drizzle-kit is available
             docker compose exec -T backend npm run db:migrate || echo "Migration skipped or failed"
 
             echo "Cleaning up old Docker images..."
