@@ -1,12 +1,17 @@
 import { Worker } from "bullmq";
 import { eq } from "drizzle-orm";
-import { connection } from "@/lib/queue";
+import IORedis from "ioredis";
+import { env } from "@/common/utils/envConfig";
 import { reviewCode } from "@/lib/groq";
 import { db } from "@/db";
 import { reviewsTable } from "@/db/schema";
 import { logger } from "@/server";
 
 logger.info("Initializing review worker...");
+
+const workerConnection = new IORedis(env.REDIS_URL, {
+	maxRetriesPerRequest: null,
+});
 
 export const reviewWorker = new Worker(
 	"review-queue",
@@ -39,9 +44,18 @@ export const reviewWorker = new Worker(
 			throw error;
 		}
 	},
-	{ connection: connection as any }
+	{ connection: workerConnection as any }
 );
 
 reviewWorker.on("failed", (job, err) => {
 	logger.error(`Job \${job?.id} has failed with \${err.message}`);
 });
+
+reviewWorker.on("ready", () => {
+	logger.info("Worker is ready and listening for jobs");
+});
+
+reviewWorker.on("active", (job) => {
+	logger.info(`Worker started processing job \${job.id}`);
+});
+
