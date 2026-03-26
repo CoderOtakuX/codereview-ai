@@ -27,6 +27,23 @@ export function AuthPage() {
     }
   };
 
+  const handleGuestLogin = async () => {
+    setError("");
+    setLoading(true);
+    try {
+      const guestEmail = `guest_${Math.random().toString(36).substring(7)}@codereview.ai`;
+      const res = await api.register({ email: guestEmail, password: "GuestPassword123!" });
+      if (res.success && res.responseObject?.token) {
+        localStorage.setItem("token", res.responseObject.token);
+        navigate("/dashboard");
+      }
+    } catch (err: any) {
+      setError("Failed to create guest session. Is the backend running?");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="font-body text-on-surface antialiased min-h-screen flex items-center justify-center p-6" style={{ backgroundColor: "#0f0f0f" }}>
       {/* Login Container */}
@@ -100,6 +117,20 @@ export function AuthPage() {
               </button>
             </div>
           </form>
+
+          {/* Guest Action */}
+          <div className="mt-6">
+            <button
+              type="button"
+              onClick={handleGuestLogin}
+              disabled={loading}
+              className="w-full border border-outline-variant/30 hover:bg-surface-container-high text-on-surface font-semibold py-4 rounded-full transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2"
+            >
+              Use without Signup
+              <span className="material-symbols-outlined text-lg" data-icon="explore">explore</span>
+            </button>
+          </div>
+
           {/* Secondary Actions */}
           <div className="mt-8 pt-8 border-t border-outline-variant/10 text-center">
             <p className="text-sm text-on-surface-variant">
