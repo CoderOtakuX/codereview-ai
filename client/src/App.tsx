@@ -4,7 +4,7 @@ import { Toaster } from "react-hot-toast";
 import { Navbar } from "./components/Navbar";
 import { AuthPage } from "./pages/AuthPage";
 import { DashboardPage } from "./pages/DashboardPage";
-import { LandingPage } from "./pages/LandingPage.jsx";
+import { LandingPage } from "./pages/LandingPage";
 
 const queryClient = new QueryClient();
 
