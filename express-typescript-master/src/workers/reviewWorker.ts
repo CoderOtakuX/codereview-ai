@@ -19,8 +19,8 @@ export const reviewWorker = new Worker(
 		const { reviewId, code, language } = job.data;
 		
 		try {
-			// Add a small delay for rate limiting if needed (2 seconds)
-			await new Promise(resolve => setTimeout(resolve, 2000));
+			// Add a delay for rate limiting (4 seconds for better pacing)
+			await new Promise(resolve => setTimeout(resolve, 4000));
 
 			// Update status to processing
 			await db.update(reviewsTable)

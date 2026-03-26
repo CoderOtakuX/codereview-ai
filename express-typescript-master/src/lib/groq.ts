@@ -16,12 +16,12 @@ export const ReviewResultSchema = z.object({
 			line: z.number().nullable().optional(),
 			message: z.string(),
 			suggestion: z.string().optional().default(""),
-			explanation: z.string().optional().default(""),
-			affectedCode: z.string().optional().default(""),
-			fixedCode: z.string().optional().default(""),
-			docUrl: z.string().optional(),
-			codeExample: z.string().optional(),
-			pattern: z.string().optional(),
+			explanation: z.string().nullable().optional().default(""),
+			affectedCode: z.string().nullable().optional().default(""),
+			fixedCode: z.string().nullable().optional().default(""),
+			docUrl: z.string().nullable().optional(),
+			codeExample: z.string().nullable().optional(),
+			pattern: z.string().nullable().optional(),
 		})
 	),
 });
