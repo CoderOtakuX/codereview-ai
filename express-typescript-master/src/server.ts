@@ -11,6 +11,8 @@ import requestLogger from "@/common/middleware/requestLogger";
 import { env } from "@/common/utils/envConfig";
 
 const logger = pino({ name: "server start" });
+// CI/CD Pipeline Verification: Triggering first automated deployment
+logger.info("Starting CodeReview AI Backend in Production Mode");
 const app: Express = express();
 
 // Set the application to trust the reverse proxy
