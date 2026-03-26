@@ -1,4 +1,4 @@
-export const API_BASE = import.meta.env.PROD ? "" : "http://localhost:8080";
+export const API_BASE = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? "" : "http://localhost:8080");
 
 export const fetchWithAuth = async (endpoint: string, options: RequestInit = {}) => {
   const token = localStorage.getItem("token");
