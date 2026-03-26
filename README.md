@@ -7,27 +7,21 @@
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED)](https://www.docker.com/)
 [![AWS](https://img.shields.io/badge/AWS-EC2%20%7C%20RDS-FF9900)](https://aws.amazon.com/)
 
-## 🌐 Live Demo
-
-**[http://YOUR_EC2_IP:3000](http://YOUR_EC2_IP:3000)**
-```bash
-# Test Account (or register your own)
-Email: demo@codereview.ai
-Password: Demo123!
-```
+## 🌐 Live Production URL
+**[https://codereview-ai.duckdns.org](https://codereview-ai.duckdns.org)**
 
 ---
 
-## 📸 Screenshots
+## 📸 Proof of Concept & CI/CD
 
-### Dashboard — Multiple Input Methods
+### 🚀 Landing Page — Professional First Impression
+![Landing Page](docs/images/landing_page.png)
+
+### 📊 Dashboard — Multi-Source AI Analysis
 ![Dashboard](docs/images/dashboard.png)
 
-### AI Review Results with Download Fixes
-![Review Results](docs/images/review-results.png)
-
-### GitHub PR Integration
-![GitHub PR](docs/images/github-pr.png)
+### ⛓️ Automated Infrastructure — CI/CD Pipeline
+![CI/CD Status](docs/images/cicd_status.png)
 
 ---
 
