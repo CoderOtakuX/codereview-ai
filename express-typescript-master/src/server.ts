@@ -21,9 +21,26 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // CORS Setup to allow frontend connections
-const originsFromEnv = env.CORS_ORIGIN.split(",").map(o => o.trim());
-const allowedOrigins = [...originsFromEnv, "http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:3000"];
-app.use(cors({ origin: allowedOrigins, credentials: true }));
+const originsFromEnv = env.CORS_ORIGIN.split(",").map(o => o.trim()).filter(Boolean);
+const defaultOrigins = ["http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:3000"];
+const allowedOrigins = [...originsFromEnv, ...defaultOrigins];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // If no origin (like mobile apps or curl requests) allow it
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.warn(`CORS blocked for origin: ${origin}`);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+}));
 app.use(helmet());
 app.use(rateLimiter);
 
