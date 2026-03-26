@@ -8,17 +8,17 @@
 [![AWS](https://img.shields.io/badge/AWS-EC2%20%7C%20RDS-FF9900)](https://aws.amazon.com/)
 
 ## 🌐 Live Production URL
-**[https://codereview-ai.duckdns.org](https://codereview-ai.duckdns.org)**
+**[https://codereviewai-zeta.vercel.app/](https://codereviewai-zeta.vercel.app/)**
 
 ---
 
 ## 📸 Proof of Concept & CI/CD
 
 ### 🚀 Landing Page — Professional First Impression
-![Landing Page](docs/images/landing_page.png)
+<img width="1572" height="1502" alt="image" src="https://github.com/user-attachments/assets/bf548f8a-4a78-4f4d-8f44-cc52d1e6b67d" />
 
 ### 📊 Dashboard — Multi-Source AI Analysis
-![Dashboard](docs/images/dashboard.png)
+<img width="1920" height="1949" alt="image" src="https://github.com/user-attachments/assets/672e23f0-80fe-4c27-841e-90346a7bf6b2" />
 
 ### ⛓️ Automated Infrastructure — CI/CD Pipeline
 ![CI/CD Status](docs/images/cicd_status.png)
