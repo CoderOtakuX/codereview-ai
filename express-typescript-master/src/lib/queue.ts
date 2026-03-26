@@ -6,4 +6,14 @@ export const connection = new IORedis(env.REDIS_URL, {
 	maxRetriesPerRequest: null,
 });
 
-export const reviewQueue = new Queue("review-queue", { connection: connection as any });
+export const reviewQueue = new Queue("review-queue", { 
+	connection: connection as any,
+	defaultJobOptions: {
+		attempts: 3,
+		backoff: {
+			type: "exponential",
+			delay: 2000, // 2 seconds initial delay
+		},
+		removeOnComplete: true,
+	}
+});

@@ -15,6 +15,7 @@ export const reviewsTable = pgTable("reviews", {
 	filename: text("filename"),
 	status: text("status").default("pending"),
 	result: jsonb("result"),
+	errorMessage: text("error_message"),
 	createdAt: timestamp("created_at").defaultNow(),
 });
 

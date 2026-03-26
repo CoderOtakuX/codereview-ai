@@ -19,6 +19,9 @@ export const reviewWorker = new Worker(
 		const { reviewId, code, language } = job.data;
 		
 		try {
+			// Add a small delay for rate limiting if needed (2 seconds)
+			await new Promise(resolve => setTimeout(resolve, 2000));
+
 			// Update status to processing
 			await db.update(reviewsTable)
 				.set({ status: "processing" })
@@ -29,22 +32,36 @@ export const reviewWorker = new Worker(
 
 			// Update status to completed and save result
 			await db.update(reviewsTable)
-				.set({ status: "completed", result })
+				.set({ 
+					status: "completed", 
+					result: result as any,
+					errorMessage: null 
+				})
 				.where(eq(reviewsTable.id, reviewId));
 
 			logger.info(`Job ${job.id} completed for review ${reviewId}`);
 		} catch (error) {
-			logger.error(`Job ${job.id} failed for review ${reviewId}: ${(error as Error).message}`);
+			const errMsg = (error as Error).message;
+			logger.error(`Job ${job.id} failed for review ${reviewId}: ${errMsg}`);
 			
-			// Update status to failed
+			// Update status to failed and save ERROR MESSAGE
 			await db.update(reviewsTable)
-				.set({ status: "failed" })
+				.set({ 
+					status: "failed",
+					errorMessage: errMsg 
+				})
 				.where(eq(reviewsTable.id, reviewId));
 				
 			throw error;
 		}
 	},
-	{ connection: workerConnection as any }
+	{ 
+		connection: workerConnection as any,
+		limiter: {
+			max: 10, // 10 jobs per minute
+			duration: 60000
+		}
+	}
 );
 
 reviewWorker.on("failed", (job, err) => {

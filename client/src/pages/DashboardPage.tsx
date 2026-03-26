@@ -62,9 +62,11 @@ function PrReviewPanel({ file }: { file: { filename: string, reviewId: string } 
           ) : status === "completed" ? (
              <CheckCircle className="w-4 h-4 text-brand" />
           ) : (
-             <AlertCircle className="w-4 h-4 text-red-500" />
+             <AlertCircle className="w-4 h-4 text-red-500" title={reviewInfo?.responseObject?.errorMessage || ""} />
           )}
-          <span className="text-xs uppercase px-2 py-1 rounded bg-editor border border-zinc-800 text-zinc-400 hidden sm:inline-block font-mono">{status}</span>
+          <span className="text-xs uppercase px-2 py-1 rounded bg-editor border border-zinc-800 text-zinc-400 font-mono" title={reviewInfo?.responseObject?.errorMessage || ""}>
+            {status}
+          </span>
           {result?.score !== undefined && (
             <span className="text-xs font-bold px-3 py-1 rounded-full bg-brand/10 border border-brand/20 text-brand font-mono">{result.score}/10</span>
           )}
@@ -578,10 +580,18 @@ export function DashboardPage() {
             )}
 
             {status === "failed" && (
-              <div className="flex-1 flex flex-col items-center justify-center text-red-500">
+              <div className="flex-1 flex flex-col items-center justify-center text-red-500 p-8 text-center">
                 <AlertCircle className="w-20 h-20 mb-6 opacity-80" />
                 <p className="font-extrabold text-2xl tracking-tight">Analysis Failed</p>
-                <p className="text-red-400/70 mt-3 text-sm">Please modify your code and try again.</p>
+                {reviewInfo?.responseObject?.errorMessage && (
+                  <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-6 mt-6 max-w-lg w-full">
+                    <p className="text-xs uppercase tracking-widest font-bold mb-2 opacity-50">Error Reason</p>
+                    <p className="text-sm font-mono break-words">
+                      {reviewInfo.responseObject.errorMessage}
+                    </p>
+                  </div>
+                )}
+                <p className="text-red-400/50 mt-6 text-sm italic">You may need to wait a minute and try again if this is a rate limit error.</p>
               </div>
             )}
 
