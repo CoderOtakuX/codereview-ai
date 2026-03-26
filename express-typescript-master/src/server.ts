@@ -15,7 +15,13 @@ logger.info("Starting CodeReview AI Backend in Production Mode");
 
 // CORS Debugging: Log allowed origins on startup
 const originsFromEnv = env.CORS_ORIGIN.split(",").map(o => o.trim()).filter(Boolean);
-const defaultOrigins = ["http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:3000"];
+const defaultOrigins = [
+  "https://codereviewai-zeta.vercel.app",
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:5175",
+  "http://localhost:3000",
+];
 const allowedOrigins = [...originsFromEnv, ...defaultOrigins];
 logger.info({ allowedOrigins }, "Configured CORS Allowed Origins");
 
