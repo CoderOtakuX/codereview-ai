@@ -32,13 +32,13 @@ export function AuthPage() {
     setLoading(true);
     try {
       const guestEmail = `guest_${Math.random().toString(36).substring(7)}@codereview.ai`;
-      const res = await api.register({ email: guestEmail, password: "GuestPassword123!" });
+      const res = await api.register({ email: guestEmail, password: "GuestPassword123!", name: "Guest User" });
       if (res.success && res.responseObject?.token) {
         localStorage.setItem("token", res.responseObject.token);
         navigate("/dashboard");
       }
     } catch (err: any) {
-      setError("Failed to create guest session. Is the backend running?");
+      setError(err.message || "Failed to create guest session. Is the backend running?");
     } finally {
       setLoading(false);
     }
