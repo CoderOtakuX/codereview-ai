@@ -11,8 +11,14 @@ import requestLogger from "@/common/middleware/requestLogger";
 import { env } from "@/common/utils/envConfig";
 
 const logger = pino({ name: "server start" });
-// CI/CD Pipeline Verification: Triggering first automated deployment
 logger.info("Starting CodeReview AI Backend in Production Mode");
+
+// CORS Debugging: Log allowed origins on startup
+const originsFromEnv = env.CORS_ORIGIN.split(",").map(o => o.trim()).filter(Boolean);
+const defaultOrigins = ["http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:3000"];
+const allowedOrigins = [...originsFromEnv, ...defaultOrigins];
+logger.info({ allowedOrigins }, "Configured CORS Allowed Origins");
+
 const app: Express = express();
 
 // Set the application to trust the reverse proxy
@@ -23,10 +29,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // CORS Setup to allow frontend connections
-const originsFromEnv = env.CORS_ORIGIN.split(",").map(o => o.trim()).filter(Boolean);
-const defaultOrigins = ["http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:3000"];
-const allowedOrigins = [...originsFromEnv, ...defaultOrigins];
-
 app.use(cors({
   origin: (origin, callback) => {
     // If no origin (like mobile apps or curl requests) allow it
@@ -35,7 +37,7 @@ app.use(cors({
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
-      console.warn(`CORS blocked for origin: ${origin}`);
+      logger.warn({ origin, allowedOrigins }, "CORS blocked for origin");
       callback(new Error("Not allowed by CORS"));
     }
   },
